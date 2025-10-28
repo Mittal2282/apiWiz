@@ -1,146 +1,173 @@
 # JSON Tree Visualizer
 
-An interactive web application that visualizes JSON data as a hierarchical tree structure using React Flow.
+A web application for visualizing JSON data as an interactive tree diagram. Built with React and React Flow for exploring and understanding complex JSON structures.
+
+## Overview
+
+This tool provides a split-panel interface with a JSON editor on the left and a tree visualization on the right. JSON data is parsed and rendered as nodes connected by edges, making it easier to navigate nested structures and understand relationships between data points.
 
 ## Features
 
-### ✅ Mandatory Features (Implemented)
+### Editor Panel
 
-1. **JSON Input & Parsing**
-   - Text area for pasting/typing JSON data
-   - JSON validation with error messages
-   - "Generate Tree" button
-   - Sample JSON as placeholder
-   - Clear/Reset functionality
+- Monaco Editor integration with syntax highlighting
+- JSON validation with inline error messages
+- Import JSON files from disk
+- Format, fold, and unfold document actions
+- Sample JSON populated by default
+- Reset button to restore initial state
 
-2. **Tree Visualization using React Flow**
-   - Hierarchical node tree displaying JSON structure
-   - Color-coded node types:
-     - **Blue/Purple** (#6366f1): Objects
-     - **Green** (#10b981): Arrays
-     - **Orange/Yellow** (#f59e0b): Primitives (strings, numbers, booleans, null)
-   - Parent-child connections with lines
-   - Smooth tree layout
+### Visualization Panel
 
-3. **Search Functionality**
-   - Search by JSON path (e.g., `user.address.city`, `items[0].name`)
-   - Highlights matching nodes with red border
-   - Shows "Match found" or "No match found" messages
-   - Real-time search results
+Tree rendering of JSON structure with:
 
-### ✅ Optional Features (Implemented)
+- Color-coded node types: Blue for objects, green for arrays, orange for primitives
+- Click nodes to copy their JSON path to clipboard
+- Hover over nodes to display path and value information
+- Fullscreen mode for focused viewing
+- Download tree as PNG image
+- Pan and zoom controls
+- Mini map for navigation
+- Draggable nodes for custom positioning
 
-1. **Zoom Controls**
-   - Zoom In button
-   - Zoom Out button
-   - Fit View button
-   - Integrated with React Flow's control panel
+### Search & Navigation
 
-2. **Pan & Drag**
-   - Full canvas panning support
-   - Drag to navigate the tree
-   - Smooth interaction
+- Search by JSON path (e.g., `user.address.city`, `items[0].name`)
+- Auto-zoom to matched nodes
+- Visual highlighting of search results
+- Path normalization supports various notations
 
-3. **Interactive Features**
-   - Hover nodes to see path and value information
-   - Click nodes to copy their JSON path to clipboard
-   - Visual feedback on interactions
+### UI & Themes
 
-4. **Dark/Light Mode Toggle**
-   - Beautiful theme switcher
-   - Smooth transitions
-   - Persists throughout the application
+- Dark and light mode toggle
+- Responsive grid layout
+- Toast notifications for user actions
+- Minimalist design with Tailwind CSS
 
-5. **Additional UI Elements**
-   - Mini map for navigation
-   - Background grid
-   - Responsive layout
-   - Clean, minimalistic design
+## Installation
 
-## Getting Started
-
-### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
-
-### Installation
+Install dependencies:
 
 ```bash
-# Install dependencies
 npm install
+```
 
-# Start development server
+Start development server:
+
+```bash
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173`
-
-### Build for Production
+Build for production:
 
 ```bash
 npm run build
 ```
 
+Preview production build:
+
+```bash
+npm run preview
+```
+
 ## Usage
 
-1. **Input JSON**: Paste or type your JSON data in the left panel
-2. **Generate Tree**: Click the "Generate Tree" button to visualize your JSON
-3. **Search**: Enter a path in the search bar (e.g., `user.name`) and click "Search"
-4. **Explore**: 
-   - Use zoom controls to adjust view
-   - Drag to pan around the tree
-   - Hover nodes to see details
-   - Click nodes to copy their path
-5. **Toggle Theme**: Use the dark/light mode toggle in the top right
+1. Input JSON in the editor panel (use the import button for files)
+2. Click "Generate Tree" to render the visualization
+3. Use the search bar to find specific paths in the JSON
+4. Hover nodes to inspect path and value details
+5. Click nodes to copy their path to clipboard
+6. Use fullscreen and download options in the toolbar
+7. Toggle dark mode via the navbar control
 
-## Examples
+### Search Examples
 
-### Sample JSON Paths
-- `user` - Find the user object
-- `user.name` - Find the name property
-- `user.address.city` - Find the city in address
-- `items[0]` - Find first array item
-- `items[0].name` - Find name in first item
-
-## Technologies Used
-
-- **React** - UI framework
-- **React Flow** - Tree visualization
-- **Tailwind CSS** - Styling
-- **Vite** - Build tool
-- **JavaScript** - Language
+- `user` - matches user object
+- `user.name` - finds name property
+- `user.address.city` - navigates nested objects
+- `items[0]` - locates first array element
+- `items[0].name` - gets property within array item
 
 ## Project Structure
 
 ```
-apiWiz_assignment/
-├── src/
-│   ├── App.jsx          # Main application component
-│   ├── main.jsx         # React entry point
-│   └── index.css        # Global styles
-├── public/
-├── package.json
-├── vite.config.js
-└── README.md
+src/
+├── App.jsx                      # Main component, state management
+├── main.jsx                     # React entry point
+├── index.css                    # Global styles
+├── components/
+│   ├── JSONInput.jsx           # Monaco editor wrapper
+│   ├── TreeVisualization.jsx   # React Flow rendering
+│   ├── Navbar.jsx              # Navigation bar
+│   ├── ThemeToggle.jsx         # Dark mode switcher
+│   └── Toast.jsx                # Notification system
+└── utils/
+    ├── treeGenerator.js        # JSON to nodes/edges conversion
+    └── searchUtils.js          # Path matching logic
 ```
 
-## Key Features Explained
+## How It Works
 
-### Tree Generation Algorithm
-The application uses a recursive algorithm to traverse the JSON structure and create nodes at appropriate positions. Each level of nesting is positioned 200px to the right, creating a clear hierarchical visualization.
+### Tree Generation
 
-### Node Types
-- **Object nodes**: Blue background, display object keys
-- **Array nodes**: Green background, show array indices and length
-- **Primitive nodes**: Orange background, display key-value pairs
+The app recursively processes JSON values to create node graphs:
+
+- Objects render as blue nodes showing their key
+- Arrays render as green nodes showing index notation and length
+- Primitives render as orange nodes with their key-value pair
+- Each nesting level offsets 250px horizontally
+- Children are spaced 100px apart vertically
+
+Nodes carry metadata including their JSON path, node type, and display value. Edges connect parent nodes to children using animated smoothstep lines.
 
 ### Search Implementation
-The search function filters nodes by path, allowing users to quickly locate specific data within complex JSON structures. Matching nodes are highlighted with a red border.
 
-## License
+Search uses normalized path matching to compare query strings against node paths. It:
 
-This project is created as an assignment for APIWiz.
+- Strips leading `$` or `.` prefixes
+- Converts to lowercase for case-insensitive matching
+- Splits paths by `.` and `[` delimiters
+- Matches segment by segment for partial path queries
 
-## Author
+### State Management
 
-Built with ❤️ using React and React Flow
+Component state tracks:
+
+- Raw JSON input string
+- Parsed JSON data object
+- Validation errors
+- Current search query and results
+- Highlighted node ID
+- Hover information
+- Theme preference
+- Toast messages and visibility
+
+## Dependencies
+
+- **react** - UI library
+- **react-dom** - React DOM bindings
+- **reactflow** - Graph visualization
+- **@monaco-editor/react** - Code editor
+- **tailwindcss** - CSS framework
+- **html-to-image** - PNG export
+- **vite** - Build tool
+
+## Browser Support
+
+Works in modern browsers that support:
+
+- ES6+ JavaScript
+- React 19
+- Clipboard API
+- Fullscreen API
+- CSS Grid
+
+## Build Output
+
+Production build generates:
+
+- `index.html` - Entry HTML file
+- `assets/index-[hash].css` - Compiled styles
+- `assets/index-[hash].js` - Bundled JavaScript
+
+Bundle size is approximately 112KB gzipped.
